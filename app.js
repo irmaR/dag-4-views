@@ -26,7 +26,7 @@ var data = {
         "J": { id: "J", name: "J", terminal: false, course_id: 3, c_name: "course3" },
         "K": { id: "K", name: "K", terminal: true, course_id: 1, c_name: "course1" },
         "M": { id: "M", name: "M", terminal: false, course_id: 1, c_name: "course1" },
-        "N": { id: "N", name: "N", terminal: false, course_id: 1, c_name: "course1" },
+        "N": { id: "N", name: "N", terminal: true, course_id: 1, c_name: "course1" },
     },
     "links": [["N", "M"], ["F", "M"], ["K", "A"], ["A", "C"], ["B", "C"], ["F", "C"], ["D", "G"], ["E", "G"], ["G", "H"], ["G", "I"], ["H", "J"]]
 };
@@ -39,6 +39,8 @@ var show_roots = true;
 var all_nodes = undefined;
 var roots = undefined;
 var dag = undefined;
+
+
 
 function handleSelect(value) {
     // make dag from edge list
@@ -172,6 +174,8 @@ var tree = d3.sugiyama()
         (a, b) => { return 20 }
     );
 
+//default: show course1
+handleSelect("course1");
 
 
 
