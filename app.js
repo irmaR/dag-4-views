@@ -28,8 +28,10 @@ var data = {
         "M": { id: "M", name: "M", terminal: false, course_id: 1, c_name: "course1" },
         "N": { id: "N", name: "N", terminal: true, course_id: 1, c_name: "course1" },
     },
-    "links": [["N", "M"], ["F", "M"], ["K", "A"], ["A", "C"], ["B", "C"], ["F", "C"], ["D", "G"], ["E", "G"], ["G", "H"], ["G", "I"], ["H", "J"]]
+    "links": [["N", "M"], ["F", "M"], ["K", "A"], ["A", "C"], ["B", "C"], ["F", "C"], ["D", "G"], ["E", "G"], ["H", "G"], ["I", "G"], ["H", "J"]]
 };
+
+var course_colors = { "course1": "green", "course2": "#99951c", "course3": "#4196ab" };
 
 var screen_width = document.body.offsetWidth,
     screen_height = document.documentElement.clientHeight;
@@ -39,11 +41,11 @@ var show_roots = true;
 var all_nodes = undefined;
 var roots = undefined;
 var dag = undefined;
-
-
+var course_value = undefined;
 
 function handleSelect(value) {
     // make dag from edge list
+    course_value = value;
     dag = d3.dagConnect()(data.links);
     var dag_tree = tree(dag),
         nodes = dag.descendants(),
@@ -84,7 +86,7 @@ function handleSelect(value) {
     console.log("ROOTS", roots);
     dag.children = roots; //change dag's children only to these roots
 
-    
+
     roots.forEach(n => {
         show_roots = true;
         //uncollapse(n);
@@ -124,10 +126,10 @@ var tip = d3.tip()
     .html(
         function (d) {
             var content = `
-        <span style='margin-left: 2.5px;'><b>` + d.data.name + `</b></span><br>
-        <table style="margin-top: 2.5px;">
+        <span style='margin-left: 2.5px;'><b>` + d.data.c_name + `</b></span><br>
+        <!-- <table style="margin-top: 2.5px;">
           <tr><td>name:</td><td>` + (d.data.id || "?") + `</td></tr>
-        </table>
+        </table> -->
         `
             return content
         }
@@ -342,12 +344,14 @@ function update(source) {
         .attr('class', 'node')
         .attr('r', 12)
         .style("fill", function (d) {
-            if (d.isroot === true) {
+            color = course_colors[d.data.c_name];
+            return is_extendable(d) ? color : "#fff";
+            /*if (d.isroot === true) {
                 return "#990099";
             }
             else {
                 return is_extendable(d) ? "lightsteelblue" : "#fff";
-            }
+            }*/
         })
         .style("stroke", function (d) {
             if (d.uncollapsed === true && is_extendable(d)) {
@@ -355,9 +359,10 @@ function update(source) {
             }
         })
         .style("stroke-width", function (d) {
-            if (d.uncollapsed && is_extendable(d)) {
+            //if (d.uncollapsed && is_extendable(d)) {
                 return 5;
-            }
+            //}
+            
         });
 
 
@@ -383,25 +388,30 @@ function update(source) {
         });
 
     // Update the node attributes and style
-    nodeUpdate.select('circle.node')
+    nodeUpdate.select('circle.node').
+        style('fill-opacity', function (d) {
+            if (d.isroot) {
+                return 0.9;
+            }
+        })
         .style("fill", function (d) {
-            if (d.isroot === true) {
-                return "#990099";
-            }
-            else {
-                return is_extendable(d) ? "lightsteelblue" : "#fff";
-            }
+            color = course_colors[d.data.c_name];
+            return is_extendable(d) ? color : "#fff";
         })
         .attr('cursor', 'pointer')
         .style("stroke", function (d) {
             if (d.uncollapsed === true && is_extendable(d)) {
                 return "8E240D";
             }
+            else{
+                color = course_colors[d.data.c_name];
+                return color;
+            }
         })
         .style("stroke-width", function (d) {
-            if (d.uncollapsed && is_extendable(d)) {
+            //if (d.uncollapsed && is_extendable(d)) {
                 return 5;
-            }
+            //}
         });
 
 
