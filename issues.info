@@ -1,0 +1,7 @@
+Integers and the Number Line,5eaed9735adf0d000485304d,5eaed9715adf0d000485301c,,,
+2.1b Adding and Subtracting Integers,5eaed9735adf0d0004853054,5eaed9715adf0d000485301c,5eaed9735adf0d000485304d,,
+
+There are some redundant dependencies. In this case Integers and the Number Line has Adding and Subtracting Whole Numbers as a remediation. However, Adding and Subtracting Integers
+has both as remediations.
+
+How to solve? preprocessing? 
