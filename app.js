@@ -31,7 +31,7 @@ Array.prototype.remove = function () {
     "links": [["N", "M"], ["F", "M"], ["K", "A"], ["A", "C"], ["B", "C"], ["F", "C"], ["D", "G"], ["E", "G"], ["H", "G"], ["I", "G"], ["H", "J"]]
 };
 */
-var course_colors = { "Prealgebra": "green", "Algebra": "#99951c", "College Algebra/Precalculus": "#4196ab" , "Calculus": "red" };
+var course_colors = { "Prealgebra": "green", "Algebra": "#99951c", "College Algebra/Precalculus": "#4196ab" , "Calculus": "#ba57d9" };
 
 var screen_width = document.body.offsetWidth,
     screen_height = document.documentElement.clientHeight;
