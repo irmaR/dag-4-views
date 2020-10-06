@@ -12,7 +12,7 @@ Array.prototype.remove = function () {
 };
 
 
-/*var data = {
+var data = {
     "nodes": {
         "A": { id: "A", name: "A", terminal: false, course_id: 1, c_name: "course1" },
         "B": { id: "B", name: "B", terminal: true, course_id: 1, c_name: "course1" },
@@ -30,8 +30,8 @@ Array.prototype.remove = function () {
     },
     "links": [["N", "M"], ["F", "M"], ["K", "A"], ["A", "C"], ["B", "C"], ["F", "C"], ["D", "G"], ["E", "G"], ["H", "G"], ["I", "G"], ["H", "J"]]
 };
-*/
-var course_colors = { "Prealgebra": "green", "Algebra": "#99951c", "College Algebra/Precalculus": "#4196ab" , "Calculus": "red" };
+
+var course_colors = { "course1": "green", "course2": "#99951c", "course3": "#4196ab" };
 
 var screen_width = document.body.offsetWidth,
     screen_height = document.documentElement.clientHeight;
@@ -51,8 +51,10 @@ function handleSelect(value) {
         nodes = dag.descendants(),
         links = dag.links();
 
+    console.log("DAG: ", dag);
     // prepare node data
     all_nodes = dag.descendants()
+    console.log(all_nodes);
 
     nodes.forEach(n => {
         n.data = data.nodes[n.id];
@@ -67,7 +69,9 @@ function handleSelect(value) {
         n.uncollapsed = false;
         n.isroot = false;
     });
-    
+
+    console.log("VALUE: ", value);
+
 
     roots = all_nodes.filter(n => n.data.terminal === true).filter(n => n.data.c_name === value);
     roots.forEach(n => {
@@ -79,6 +83,7 @@ function handleSelect(value) {
         n.uncollapsed = false;
         n.isroot = true;
     });
+    console.log("ROOTS", roots);
     dag.children = roots; //change dag's children only to these roots
 
 
@@ -158,7 +163,7 @@ defs.append("marker")
 // helper variables
 var i = 0,
     duration = 750,
-    x_sep = 300,
+    x_sep = 250,
     y_sep = 150;
 
 // declare a dag layout
@@ -172,17 +177,19 @@ var tree = d3.sugiyama()
     );
 
 //default: show course1
-handleSelect("Prealgebra");
+handleSelect("course1");
 
 
 
 // collapse a node
 function collapse(d) {
+    console.log("Collapsing");
     // remove root nodes and circle-connections
     var remove_inserted_root_nodes = n => {
         // remove all inserted root nodes
         dag.children = dag.children.filter(c => !n.inserted_roots.includes(c));
         // remove inserted connections
+        console.log('inserted connections', n, n.inserted_connections);
         n.inserted_connections.forEach(
             arr => {
                 // check existence to prevent double entries
@@ -311,6 +318,7 @@ function update(source) {
     var dag_tree = tree(dag);
     var nodes = dag.descendants(),
         links = dag.links();
+    console.log("LINKS", links);
     // ****************** Nodes section ***************************
     if (show_roots) { //do this only once; only show roots in the beginning
         nodes = nodes.filter(n => n.isroot);
@@ -363,7 +371,7 @@ function update(source) {
         .attr("x", -50)
         .attr("text-anchor", "start")
         .text(d => d.data.name)
-        .call(wrap, 250)
+        .call(wrap, 180)
         .on('click', click);
 
 
@@ -453,6 +461,7 @@ function update(source) {
         .duration(duration)
         .attr('d', function (d) {
             var o = { x: source.x, y: source.y }
+            console.log(o);
             return diagonal(o, o)
         })
         .remove();
@@ -486,6 +495,7 @@ function update(source) {
 
     // Toggle unions, children, partners on click.
     function click(d) {
+        console.log(d);
         // uncollapse if there are uncollapsed unions / children / partners
         if (d.uncollapsed === false) {
             uncollapse(d);
@@ -594,6 +604,7 @@ function show(roots) {
         .attr("class", "link")
         .attr('d', function (d) {
             var o = { x: source.x0, y: source.y0 }
+            console.log(o);
             return diagonal(o, o)
         }
         );
